@@ -1,36 +1,33 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import './components/styles/app.css'
 import PostList from './components/PostList';
 import PostForm from './components/PostForm';
 import PostFilter from './components/PostFilter';
 import MyModal from './components/UI/MyModal/MyModal';
 import MyButton from './components/UI/button/MyButton';
+import { usePosts } from './hooks/usePosts.js';
+import PostService from './API/PostService';
+import axios from 'axios';
 
 function App() {
-    const [posts, setPosts] = useState ([
-      {id: 1, title: 'zz', body: 'yy'},
-      {id: 2, title: 'gg', body: 'zz'},
-      {id: 3, title: 'dd', body: 'xx'}
-    ])
+    const [posts, setPosts] = useState ([])
 
     const [filter, setFilter] = useState({sort: '', query: ''})
     const [modal, setModal] = useState(false);
+    const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
 
-
-    const sortedPosts = useMemo(() => {
-      if(filter.sort) {
-        return [...posts].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]));
-      }
-      return posts;
-    }, [filter.sort, posts])
-
-    const sortedAndSearchedPosts = useMemo(() => {
-      return sortedPosts.filter(post => post.title.toLowerCase().includes(filter.query))
-    }, [filter.query, sortedPosts])
+    useEffect(() => {
+      fetchPosts();
+    }, []);
 
     const createPost = (newPost) => {
       setPosts([...posts, newPost])
       setModal(false)
+    }
+
+    async function fetchPosts() {
+      const posts = await PostService.getAll();
+      setPosts(posts)
     }
 
     const removePost = (post) => {
@@ -39,7 +36,8 @@ function App() {
 
     return (
       <div className="App">
-        <MyButton onClick={() => setModal(true)}>
+        <button onClick={fetchPosts}>GET POSTS</button>
+        <MyButton style={{marginTop: '30px'}} onClick={() => setModal(true)}>
           Создать пользователя
         </MyButton>
         <MyModal visible={modal} setVisible={setModal}>
