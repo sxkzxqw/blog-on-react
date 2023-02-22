@@ -41,3 +41,26 @@
     transform: translate(-350px);
     transition: all 500ms ease-in;
 }
+
+.page__wrapper {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 40px;
+    border: 1px solid teal;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.page__current {
+    border: 2px solid orangered;
+    font-weight: bold;
+}
