@@ -25,6 +25,12 @@
     border-radius: 16px;
 }
 
+.post__btns {
+    margin-left: 10px;
+    display: flex;
+    gap: 8px;
+}
+
 .post-enter {
     transform: translate(-350px);
 }
